@@ -18,7 +18,7 @@ function get_dims(filename::String)::Vector{Int}
 end
 
 """
-	 read_4dfp(filename; dtype = Float32)::Array{dtype, 4}
+    read_4dfp(filename; dtype = Float32)
 
 A very basic 4dfp-reading function; doesn't yet take endianness into account!
 
