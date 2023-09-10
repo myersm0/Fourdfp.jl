@@ -3,10 +3,10 @@ module Fourdfp
 
 using Chain
 
-"trim off .4dfp.* file extension, if any, from a filename"
+"Trim off .4dfp.* file extension, if any, from a filename"
 get_imgroot(filename::String) = replace(filename, r".4dfp.(ifh|hdr|img(.rec)?)$" => "")
 
-"the 'matrix size' lines in the ifh file gives the size of each dimension"
+"The 'matrix size' lines in a .4dfp.ifh file gives the size of each data dimension"
 function get_dims(filename::String)::Vector{Int}
 	@chain begin
 		"$(get_imgroot(filename)).4dfp.ifh"
@@ -17,8 +17,14 @@ function get_dims(filename::String)::Vector{Int}
 	end
 end
 
-"a very basic 4dfp-reading function; doesn't yet take endianness into account!"
-function read_4dfp(filename::String; dtype = Float32)::Array{dtype, 4}
+"""
+	 read_4dfp(filename; dtype = Float32)::Array{dtype, 4}
+
+A very basic 4dfp-reading function; doesn't yet take endianness into account!
+
+Filename sould be the full path of a 4dfp file, optionally omitting the file extension.
+"""
+function read_4dfp(filename::String; dtype::Type = Float32)::Array{dtype, 4}
 	imgroot = get_imgroot(filename)
 	dims = get_dims(imgroot)
 	dsize = sizeof(dtype)
