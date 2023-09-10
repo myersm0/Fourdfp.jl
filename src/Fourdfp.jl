@@ -22,7 +22,7 @@ end
 
 A very basic 4dfp-reading function; doesn't yet take endianness into account!
 
-Filename sould be the full path of a 4dfp file, optionally omitting the file extension.
+Filename sould be the path of a 4dfp file, optionally omitting the file extension.
 """
 function read_4dfp(filename::String; dtype::Type = Float32)::Array{dtype, 4}
 	imgroot = get_imgroot(filename)
