@@ -18,13 +18,13 @@ function get_dims(filename::String)::Vector{Int}
 end
 
 """
-    read_4dfp(filename; dtype = Float32)
+    load(filename; dtype = Float32)
 
 A very basic 4dfp-reading function; doesn't yet take endianness into account!
 
 Filename sould be the path of a 4dfp file, optionally omitting the file extension.
 """
-function read_4dfp(filename::String; dtype::Type = Float32)::Array{dtype, 4}
+function load(filename::String; dtype::Type = Float32)::Array{dtype, 4}
 	imgroot = get_imgroot(filename)
 	dims = get_dims(imgroot)
 	dsize = sizeof(dtype)
@@ -38,7 +38,6 @@ function read_4dfp(filename::String; dtype::Type = Float32)::Array{dtype, 4}
 	end
 	@chain reinterpret(dtype, temp) reshape(_, dims...)
 end
-export read_4dfp
 
 end
 
