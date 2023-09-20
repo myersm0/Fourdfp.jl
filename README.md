@@ -12,7 +12,7 @@ Pkg.add(url = "http://github.com/myersm0/Fourdfp.jl")
 ```
 
 ## Usage
-Just call `Fourdfp.load()`, optionally with a `byte_order` keyword argument (LittleEndian or BigEndian). If the latter is omitted, the package will attempt to determine your file's byte order by parsing its .ifh (inter-file header) file.
+Just call `Fourdfp.load(filename)`, optionally with a `byte_order` keyword argument (LittleEndian or BigEndian). If the latter is omitted, the package will attempt to determine your file's byte order by parsing its .ifh (inter-file header) file.
 ```
 my_data_array = Fourdfp.load(filename; byte_order = LittleEndian)
 ```
