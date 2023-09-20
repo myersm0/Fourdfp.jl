@@ -6,11 +6,11 @@ mask_path = joinpath(data_dir, "glm_atlas_mask_333.4dfp.img")
 func_path = joinpath(data_dir, "functional_image_333.4dfp.img")
 
 @testset "Fourdfp.jl" begin
-	@test read_4dfp(mask_path) isa Array{Float32, 4}
-	@test read_4dfp(func_path) isa Array{Float32, 4}
+	@test Fourdfp.load(mask_path) isa Array{Float32, 4}
+	@test Fourdfp.load(func_path) isa Array{Float32, 4}
 
-	mask = read_4dfp(mask_path)
-	func = read_4dfp(func_path)
+	mask = Fourdfp.load(mask_path)
+	func = Fourdfp.load(func_path)
 
 	@test Fourdfp.get_dims(mask_path) == [48, 64, 48, 1]
 	@test Fourdfp.get_dims(func_path) == [48, 64, 48, 5]

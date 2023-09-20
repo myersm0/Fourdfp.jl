@@ -17,6 +17,23 @@ function get_dims(filename::String)::Vector{Int}
 	end
 end
 
+function get_endianness(filename::String)::String
+	endianness =
+		@chain begin
+			"$(Fourdfp.get_imgroot(filename)).4dfp.ifh"
+			readlines
+			filter(x -> !isnothing(match(r"^imagedata byte order", x)), _)
+			replace.(_, r".*:= (\w+)" => s"\1")
+		end
+	if length(endianness) == 1
+		@assert endianness[1] in ("littleendian", "bigendian")
+		return endianness[1]
+	else
+		@assert length(endianness) == 0
+		return "littleendian"
+	end
+end
+
 """
     load(filename; dtype = Float32)
 
@@ -36,7 +53,9 @@ function load(filename::String; dtype::Type = Float32)::Array{dtype, 4}
 	open("$imgroot.4dfp.img", "r") do fid
 		readbytes!(fid, temp, bytes_to_read)
 	end
-	@chain reinterpret(dtype, temp) reshape(_, dims...)
+	endianness = get_endianness(filename)
+	byte_order_fn = endianness == "littleendian" ? ltoh : ntoh
+	@chain reinterpret(dtype, temp) byte_order_fn.(_) reshape(_, dims...)
 end
 
 end
