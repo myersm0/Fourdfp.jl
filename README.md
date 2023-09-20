@@ -1,6 +1,6 @@
 # Fourdfp
 
-This package implements a simple 4dfp-reading function (`Fourdfp.load(filename; dtype = Float32`) for the Julia language.
+This package implements a simple 4dfp-reading function `Fourdfp.load(filename)` for the Julia language.
 
 4dfp is a format for storing volumetric fMRI images, developed at Washington University in St. Louis by Avi Snyder. For further information, see its [documentation](https://4dfp.readthedocs.io/en/latest/format.html).
 
@@ -9,6 +9,7 @@ Within Julia:
 ```
 using Pkg
 Pkg.add(url = "http://github.com/myersm0/Fourdfp.jl")
+```
 
 ## Usage
 Just call `Fourdfp.load()`, optionally with a `byte_order` keyword argument (LittleEndian or BigEndian). If the latter is omitted, the package will attempt to determine your file's byte order by parsing its .ifh (inter-file header) file.
