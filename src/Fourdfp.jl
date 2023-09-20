@@ -40,7 +40,7 @@ end
 
 A simple 4dfp-reading function.
 
-Filename sould be the path of a 4dfp file, optionally omitting the file extension.
+Filename should be the path of a 4dfp file, optionally omitting the file extension.
 
 Byte order should be one of LittleEndian or BigEndian; or omit this argument
 and the function will attempt to parse the byte order from the .4dfp.ifh file.
