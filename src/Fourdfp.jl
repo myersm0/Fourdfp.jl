@@ -6,10 +6,10 @@ using Chain
 @enum ByteOrder LittleEndian BigEndian
 export LittleEndian, BigEndian
 
-"Trim off .4dfp.* file extension, if any, from a filename"
+"Trim off the .4dfp.* file extension, if any, from a filename"
 get_imgroot(filename::String) = replace(filename, r".4dfp.(ifh|hdr|img(.rec)?)$" => "")
 
-"The 'matrix size' lines in a .4dfp.ifh file gives the size of each data dimension"
+"Get the size of each data dimension"
 function get_dims(filename::String)::Vector{Int}
 	@chain begin
 		"$(get_imgroot(filename)).4dfp.ifh"
@@ -20,6 +20,7 @@ function get_dims(filename::String)::Vector{Int}
 	end
 end
 
+"Attempt to determine the endianness, or byte order, from a .4dfp.ifh file"
 function get_endianness(filename::String)::ByteOrder
 	endianness =
 		@chain begin
@@ -28,24 +29,22 @@ function get_endianness(filename::String)::ByteOrder
 			filter(x -> !isnothing(match(r"^imagedata byte order", x)), _)
 			replace.(_, r".*:= (\w+)" => s"\1")
 		end
-	if length(endianness) == 1 && endianness[1] in ("littleendian", "bigendian")
-		return endianness[1] == "littleendian" ? LittleEndian : BigEndian
-	else
-		error("Byte order (endianness) could not be parsed from ifh file for $filename")
-	end
+	length(endianness) == 1 && endianness[1] in ("littleendian", "bigendian") ||
+		error("Byte order could not be parsed from ifh file for $filename")
+	return endianness[1] == "littleendian" ? LittleEndian : BigEndian
 end
 
 """
-	 load(filename; byte_order)
+Read a 4dfp image file.
 
-A simple 4dfp-reading function.
+`filename` should be the path of a 4dfp file, optionally omitting the file extension.
 
-Filename should be the path of a 4dfp file, optionally omitting the file extension.
-
-Byte order should be one of LittleEndian or BigEndian; or omit this argument
-and the function will attempt to parse the byte order from the .4dfp.ifh file.
+`byte_order` should be one of `LittleEndian` or `BigEndian`; or omit this argument
+and `get_endianness()` will attempt to parse the it from the .4dfp.ifh file.
 """
-function load(filename::String; byte_order::Union{Nothing, ByteOrder} = nothing)
+function load(
+		filename::String; byte_order::Union{Nothing, ByteOrder} = nothing
+	)::Array{Float32, 4}
 	imgroot = get_imgroot(filename)
 	dims = get_dims(imgroot)
 	dtype = Float32
