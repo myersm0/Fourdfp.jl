@@ -8,15 +8,16 @@ This package implements a simple 4dfp-reading function `Fourdfp.load(filename)` 
 Within Julia:
 ```
 using Pkg
-Pkg.add(url = "http://github.com/myersm0/Fourdfp.jl")
+Pkg.add("Fourdfp")
 ```
 
 ## Usage
-Just call `Fourdfp.load(filename)`, optionally with a `byte_order` keyword argument (LittleEndian or BigEndian). If the latter is omitted, the package will attempt to determine your file's byte order by parsing its .ifh (inter-file header) file.
+Just call `Fourdfp.load(filename)`, optionally with a `byte_order` keyword argument (`LittleEndian` or `BigEndian`). If the latter is omitted, the package will attempt to determine your file's byte order by parsing its .ifh (inter-file header) file. Since 4dfp files come in sets of 3 or 4 (.4dfp.img, .4dfp.ifh, .4dfp.hdr), the filename you specify can be any one of that set or for brevity you can just omit the .4dfp.* file extension.
 ```
+using Fourdfp
 my_data_array = Fourdfp.load(filename; byte_order = LittleEndian)
 ```
-The return value will be an Array{Float32, 4}, where the fourth dimension is time.
+The return value will be an Array{Float32, 4}, where the dimensions represent x, y, z, and time.
 
 [![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://myersm0.github.io/Fourdfp.jl/stable/)
 [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://myersm0.github.io/Fourdfp.jl/dev/)
