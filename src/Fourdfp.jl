@@ -35,6 +35,8 @@ function get_endianness(filename::String)::ByteOrder
 end
 
 """
+    load(filename; byte_order)
+
 Read a 4dfp image file.
 
 `filename` should be the path of a 4dfp file, optionally omitting the file extension.
